@@ -3,13 +3,17 @@ import LEANLEARNING
 -- variables are declared using def. def [name] : [type] := [value]
 def test : String := "Hello world!"
 
+
+
 -- variables may be used as values in expressions
 #eval test
 
 -- functions are declared using def. def [name] [param : type] : [return type] := [func]
-def max (a : Nat) (b : Nat) : Nat :=
+def max2 (a : Nat) (b : Nat) : Nat :=
   if a > b then a
   else b
+
+#eval max2 3 4
 
 -- Lean defaults to unsigned Natural numbers. Use int for negative calculations
 #eval (1 - 2 : Int)
@@ -29,6 +33,16 @@ structure RectangularPrism where
   height : Float
   width : Float
   depth : Float
+
+structure Square where
+  sideLength : Float
+
+def area (square : Square) : Float :=
+  square.sideLength * square.sideLength
+
+def square : Square := { sideLength := 8 }
+
+#eval area square
 
 def volume2 (prism : RectangularPrism) : Float :=
   prism.height * prism.width * prism.depth
@@ -52,3 +66,8 @@ def length (lineSegment : Segment) : Float :=
 def lineSeg : Segment := { extr1 := 1.0, extr2 := 5.0 }
 
 #eval length lineSeg
+
+-- ------------------------------------------------------------------------------------------------------------ --
+
+def main : IO Unit :=
+  IO.println "Hello, world!"
