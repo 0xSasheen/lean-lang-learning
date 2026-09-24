@@ -10,12 +10,14 @@ def main : IO Unit :=
 
 -- we need to define what "odd" and "even" actually are.
 -- in this case, we say that:
+
 /-
 
   A number n ∈ ℕ is odd if there exists a number r ∈ ℕ such that n = r + r + 1.
   A number n ∈ ℕ is even if there exists a number r ∈ ℕ such that n = r + r.
 
 -/
+
 -- this makes sense. the definition we are used to is n = 2k, but instead of k we use r
 -- for odd it's 2k + 1, or k + k + 1, but since we use r it's r + r + 1.
 
@@ -71,3 +73,48 @@ theorem OddPlusEvenIsOdd (a b : Nat) (ha : Odd1 a) (hb : Even1 b) : Odd1 (a + b)
   rw [hk1, hk2]
   use (k1 + k2)
   ring
+
+------------------------------------------------
+-- prove even * 2 = even
+/-
+
+  2 * 2k1
+  (2 * k1) ∈ ℤ, = k2
+  2(k2) is even.
+
+-/
+
+theorem TwoTimesEvenIsEven (a : Nat) (ha : Even1 a) : Even1 (2 * a) := by
+  obtain ⟨k1, hk1⟩ := ha
+  rw [hk1]
+  use (k1 + k1)
+  ring
+
+------------------------------------------------
+-- using already-written theorems to prove other theorems
+-- prove odd + 2 = odd
+/-
+
+  2 + (2k + 1)
+  2 + 2k + 1
+  2k + 3
+  even + odd = odd
+
+-/
+
+theorem OddPlusTwoIsOdd (a : Nat) (ha : Odd1 a) : Odd1 (2 + a) := by
+  obtain ⟨k1, hk1⟩ := ha
+  rw [hk1]
+
+  -- we will use the lemma OddPlusEvenIsOdd. We have to rearrange to match the form
+  rw [add_comm]
+  rw [add_assoc]
+  simp
+  rw [add_comm]
+
+
+  -- we have to prove that 3 is odd and k1 + k1 is even
+  have Oddh3 : ∃ r : Nat, 3 = r + r + 1 := ⟨1, rfl⟩
+  have Even2k1 : ∃ r : Nat, k1 + k1 = r + r := ⟨k1, rfl⟩
+
+  exact OddPlusEvenIsOdd 3 (k1 + k1) Oddh3 Even2k1
