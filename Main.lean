@@ -102,19 +102,42 @@ theorem TwoTimesEvenIsEven (a : Nat) (ha : Even1 a) : Even1 (2 * a) := by
 
 -/
 
-theorem OddPlusTwoIsOdd (a : Nat) (ha : Odd1 a) : Odd1 (2 + a) := by
+theorem OddPlusTwoIsOdd (a : Nat) (ha : Odd1 a) : Odd1 (a + 2) := by
   obtain ⟨k1, hk1⟩ := ha
   rw [hk1]
 
   -- we will use the lemma OddPlusEvenIsOdd. We have to rearrange to match the form
-  rw [add_comm]
   rw [add_assoc]
   simp
   rw [add_comm]
 
 
   -- we have to prove that 3 is odd and k1 + k1 is even
+  -- these are known as 'local propositions' - small inline proofs for whatever you want
+
   have Oddh3 : ∃ r : Nat, 3 = r + r + 1 := ⟨1, rfl⟩
   have Even2k1 : ∃ r : Nat, k1 + k1 = r + r := ⟨k1, rfl⟩
 
+  -- use the previously defined OddPlusEvenIsOdd theorem to prove our statement
   exact OddPlusEvenIsOdd 3 (k1 + k1) Oddh3 Even2k1
+
+------------------------------------------------
+-- practice!
+-- prove odd + 2 = odd
+/-
+
+2 + 2k
+2(1 + k)
+
+-/
+
+theorem EvenPlusTwoIsEven (a : Nat) (ha : Even1 a) : Even1 (a + 2) := by
+  obtain ⟨k, hk⟩ := ha
+  rw [hk]
+
+  -- prove that 2 is even and k + k is even
+  have Evenh2 : ∃ r : Nat, 2 = r + r := ⟨1, rfl⟩
+  have Evenh2k : ∃ r : Nat, k + k = r + r := ⟨k, rfl⟩
+
+  -- use the previously defined EvenPlusEvenIsEven theorem to prove our statement
+  exact EvenPlusEvenIsEven (k + k) 2 Evenh2k Evenh2
