@@ -1,73 +1,34 @@
-import LEANLEARNING
+import Mathlib
 
--- variables are declared using def. def [name] : [type] := [value]
-def test : String := "Hello world!"
-
-
-
--- variables may be used as values in expressions
-#eval test
-
--- functions are declared using def. def [name] [param : type] : [return type] := [func]
-def max2 (a : Nat) (b : Nat) : Nat :=
-  if a > b then a
-  else b
-
-#eval max2 3 4
-
--- Lean defaults to unsigned Natural numbers. Use int for negative calculations
-#eval (1 - 2 : Int)
-
-def joinStringsWith (joiner : String) (b : String) (c : String) : String :=
-  String.append b (String.append joiner c)
-
-#eval joinStringsWith ", " "one" "and another"
-
-def volume (height : Nat) (width : Nat) (depth : Nat) : Nat :=
-  height * width * depth
-
-#eval volume 10 20 30
-
--- Structures, like in C!
-structure RectangularPrism where
-  height : Float
-  width : Float
-  depth : Float
-
-structure Square where
-  sideLength : Float
-
-def area (square : Square) : Float :=
-  square.sideLength * square.sideLength
-
-def square : Square := { sideLength := 8 }
-
-#eval area square
-
-def volume2 (prism : RectangularPrism) : Float :=
-  prism.height * prism.width * prism.depth
-
--- Defining a structure is very similar to defining regular variables.
--- It is important to use the curly-brace structure to define struct members.
--- To define a structure in-line, eg. #check { height := 1.0, width := 1.0, length := 1.0}, you
--- must include a definition of the type. This can be done easily as shown below:
--- { height := 1.0, width := 1.0, length := 1.0 : RectangularPrism}
-def prism : RectangularPrism := { height := 4.0, width := 2.0, depth := 1.0 }
-
-#eval volume2 prism
-
-structure Segment where
-  extr1 : Float
-  extr2 : Float
-
-def length (lineSegment : Segment) : Float :=
-  lineSegment.extr2 - lineSegment.extr1
-
-def lineSeg : Segment := { extr1 := 1.0, extr2 := 5.0 }
-
-#eval length lineSeg
-
--- ------------------------------------------------------------------------------------------------------------ --
-
+-- add a main function so the project builds.
 def main : IO Unit :=
   IO.println "Hello, world!"
+
+------------------------------------------------
+
+-- FORALL a,b: Odd(a) -> Odd(b) -> Even(a + b)
+
+-- we need to define what "odd" and "even" actually are.
+-- in this case, we say that:
+/-
+
+  A number n ∈ ℕ is odd if there exists a number r ∈ ℕ such that n = r + r + 1.
+  A number n ∈ ℕ is even if there exists a number r ∈ ℕ such that n = r + r.
+
+-/
+-- this makes sense. the definition we are used to is n = 2k, but instead of k we use r
+-- for odd it's 2k + 1, or k + k + 1, but since we use r it's r + r + 1.
+
+------------------------------------------------
+def Odd1 (a : Nat) : Prop :=
+∃ r : Nat, a = r + r + 1
+
+def Even1 (b : Nat) : Prop :=
+∃ r : Nat, b = r + r
+
+theorem OddPlusOddIsEven (a : Nat) (b : Nat) (ha : Odd1 a) (hb : Odd1 b) : Even (a + b) := by
+  obtain ⟨r1, hr1⟩ := ha
+  obtain ⟨r2, hr2⟩ := hb
+  rw [hr1, hr2]
+  use (r1 + r2 + 1)
+  ring
