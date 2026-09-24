@@ -35,6 +35,15 @@ theorem OddPlusOddIsEven (a : Nat) (b : Nat) (ha : Odd1 a) (hb : Odd1 b) : Even1
 
 ------------------------------------------------
 -- practice!
+-- prove even + even = even
+/-
+
+  2k1 + 2k2
+  = 2(k1 + k2)
+  k1 + k2 ∈ ℕ, = k3
+  2(k3) is odd.
+
+-/
 
 theorem EvenPlusEvenIsEven (a : Nat) (b : Nat) (ha : Even1 a) (hb : Even1 b) : Even1 (a + b) := by
   obtain ⟨r1, hr1⟩ := ha
@@ -44,3 +53,21 @@ theorem EvenPlusEvenIsEven (a : Nat) (b : Nat) (ha : Even1 a) (hb : Even1 b) : E
   ring
 
 ------------------------------------------------
+-- combining our parameters now. fancy
+-- prove odd + even = odd
+/-
+
+  2k1 + (2k2 + 1)
+  =  2k1 + 2k2 + 1
+  = 2(k1 + k2) + 1
+  k1 + k2 ∈ ℕ, = k3
+  = 2(k3) + 1 is odd.
+
+-/
+
+theorem OddPlusEvenIsOdd (a b : Nat) (ha : Odd1 a) (hb : Even1 b) : Odd1 (a + b) := by
+  obtain ⟨k1, hk1⟩ := ha
+  obtain ⟨k2, hk2⟩ := hb
+  rw [hk1, hk2]
+  use (k1 + k2)
+  ring
