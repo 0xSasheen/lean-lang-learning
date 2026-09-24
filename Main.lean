@@ -26,9 +26,21 @@ def Odd1 (a : Nat) : Prop :=
 def Even1 (b : Nat) : Prop :=
 ∃ r : Nat, b = r + r
 
-theorem OddPlusOddIsEven (a : Nat) (b : Nat) (ha : Odd1 a) (hb : Odd1 b) : Even (a + b) := by
+theorem OddPlusOddIsEven (a : Nat) (b : Nat) (ha : Odd1 a) (hb : Odd1 b) : Even1 (a + b) := by
   obtain ⟨r1, hr1⟩ := ha
   obtain ⟨r2, hr2⟩ := hb
   rw [hr1, hr2]
   use (r1 + r2 + 1)
   ring
+
+------------------------------------------------
+-- practice!
+
+theorem EvenPlusEvenIsEven (a : Nat) (b : Nat) (ha : Even1 a) (hb : Even1 b) : Even1 (a + b) := by
+  obtain ⟨r1, hr1⟩ := ha
+  obtain ⟨r2, hr2⟩ := hb
+  rw [hr1, hr2]
+  use (r1 + r2)
+  ring
+
+------------------------------------------------
